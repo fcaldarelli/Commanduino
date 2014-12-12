@@ -10,7 +10,7 @@ Follow these instructions:
 3. Send a packet using specific format (using, for example, 255.255.255.255 as destination address, 8888 as port to connect and udp for protocol);
 
 
-
+![](https://cloud.githubusercontent.com/assets/4108673/5416418/7bc60cf6-822f-11e4-883a-9da7927827bc.jpg)
 
 
 Packet Format
