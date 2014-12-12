@@ -1,7 +1,21 @@
 Commanduino
 ===========
 
-This software helps you to command Arduino boards through network, using udp or tcp protocol
+This software helps you to command Arduino boards through network, using udp or tcp protocol.
+
+The software is built on two main classes: Commander and Command.
+
+Commander class
+===============
+
+Commander handle network initialization and communication, udp and tcp.
+
+ commander.setMacAddress(mac);
+ commander.setTcp(&tcp);
+ commander.tcpStartServer();
+ commander.setUdp(&udp);
+ commander.udpStartServer(localPort);
+
 
 Follow these instructions:
 
