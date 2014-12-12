@@ -8,14 +8,41 @@ The software is built on two main classes: Commander and Command.
 Commander class
 ===============
 
-Commander handle network initialization and communication, udp and tcp.
+Commander handles network initialization and communication, udp and tcp.
 
- commander.setMacAddress(mac);
- commander.setTcp(&tcp);
- commander.tcpStartServer();
- commander.setUdp(&udp);
- commander.udpStartServer(localPort);
+    commander.setMacAddress(mac);
+    commander.setTcp(&tcp);
+    commander.tcpStartServer();
+    commander.setUdp(&udp);
+    commander.udpStartServer(localPort);
 
+In commanduino.ino we use both udp and tcp protocols. Commander starts to listen to `localPort` (default 8888) tcp and udp incoming connections.
+
+At last in `loop()` method, dispatch from network, passing data to pointer function `fncDispatchActions`.
+
+
+Command class
+=============
+
+Command is the base class for all events management. Now, at time of writing, there is only a subclass, DigitalWriteCommand, that implements requests to change digital status of pin.
+
+Infact DigitaWriteCommand implements the three abstract methods: 
+- numberOfTokenRequested: when parse incoming data, we check that number of token (words separated by semicolons) is correct for this command handler;
+- checkCommandRequested: when parse incoming data, check fields consistency; in case of DigitalWriteCommand, verify that second field is req (that is request) and the third field is ´digwr´ (that is digital write command); so we are sure that command request is exactly this;
+- executeActionRequested: called when numberOfTokenRequested and checkCommandRequested matches, there we execute really the request (in the case of DigitalWriteCommand to change status of digital pin);
+
+In main code, after Commander class had dispatched new incoming connection, it will be called function pointer `fncDispatchActions`. In body of this function we find all Command subclasses to be use to check requested data.
+
+
+Implement new actions
+=====================
+
+It is very simple to implement new action (analog write, analog read, digital write, digital read,...) and I'll do this as soon as possible.
+
+You have to subclass Command class and override previous three methods.
+
+How to use
+==========
 
 Follow these instructions:
 
