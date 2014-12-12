@@ -57,44 +57,5 @@ void loop() {
   commander.udpDispatch(packetBuffer, 100, fncDispatchActions);
   commander.tcpDispatch(packetBuffer, 100, fncDispatchActions);
 
-  /*
-  // if there's data available, read a packet
-  int packetSize = Udp.parsePacket();
-  if(packetSize)
-  {
-    Serial.print("Received packet of size ");
-    Serial.println(packetSize);
-    Serial.print("From ");
-    IPAddress remote = Udp.remoteIP();
-    for (int i =0; i < 4; i++)
-    {
-      Serial.print(remote[i], DEC);
-      if (i < 3)
-      {
-        Serial.print(".");
-      }
-    }
-    Serial.print(", port ");
-    Serial.println(Udp.remotePort());
-
-    // read the packet into packetBufffer
-    int nr = Udp.read(packetBuffer,UDP_TX_PACKET_MAX_SIZE);
-    Serial.println("Contents:");
-    Serial.print("Ricevuti bytes = ");
-    Serial.println(nr);
-
-
-    // send a reply, to the IP address and port that sent us the packet we received
-    //Udp.beginPacket(Udp.remoteIP(), Udp.remotePort());
-    Udp.beginPacket(Udp.remoteIP(), Udp.remotePort());
-    Udp.write("ciao");
-    Udp.endPacket();
-    */
-  /*
-      Udp.stop();
-        Ethernet.begin(mac,ip);
-        Udp.begin(localPort);
-  */
-
   delay(100);
 }
