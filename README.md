@@ -5,6 +5,8 @@ This software helps you to command Arduino boards through network, using udp or 
 
 The software is built on two main classes: Commander and Command.
 
+Infact main code file commanduino.ino is only for initializations and calls to Commander's dispatcher functions.
+
 Commander class
 ===============
 
@@ -34,12 +36,13 @@ Infact DigitaWriteCommand implements the three abstract methods:
 In main code, after Commander class had dispatched new incoming connection, it will be called function pointer `fncDispatchActions`. In body of this function we find all Command subclasses to be use to check requested data.
 
 
-Implement new actions
-=====================
+How implement new actions
+=========================
 
 It is very simple to implement new action (analog write, analog read, digital write, digital read,...) and I'll do this as soon as possible.
 
 You have to subclass Command class and override previous three methods.
+
 
 How to use
 ==========
