@@ -5,9 +5,9 @@ This software helps you to command Arduino boards through network, using udp or 
 
 Follow these instructions:
 
-1) Open commanduino.ino and change mac (row 12), ip (row 13) if you need tcp connection and local port (row 18), if 8888 is wrong.
-2) Save and load commanduino.ino into your Arduino board.
-3) Send a packet using specific format (using, for example, 255.255.255.255 as destination address, 8888 as port to connect and udp for protocol);
+1. Open commanduino.ino and change mac (row 12), ip (row 13) if you need tcp connection and local port (row 18), if 8888 is wrong.
+2. Save and load commanduino.ino into your Arduino board.
+3. Send a packet using specific format (using, for example, 255.255.255.255 as destination address, 8888 as port to connect and udp for protocol);
 
 Packet Format
 =============
