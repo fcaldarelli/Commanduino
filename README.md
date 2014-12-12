@@ -9,6 +9,10 @@ Follow these instructions:
 2. Save and load commanduino.ino into your Arduino board.
 3. Send a packet using specific format (using, for example, 255.255.255.255 as destination address, 8888 as port to connect and udp for protocol);
 
+
+
+
+
 Packet Format
 =============
 
