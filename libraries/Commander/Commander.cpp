@@ -147,6 +147,10 @@ int Commander::udpDispatch(char *packetBuffer, int maxLengthPacketBuffer, void (
             Serial.println("Contents:");
             Serial.print("Ricevuti bytes = ");
             Serial.println(nr);
+            Serial.print("data = ");
+            Serial.println(packetBuffer);
+            
+            packetBuffer[nr] = '\0';
             
             fncServerDispatchActions(packetBuffer, NULL);
         }

@@ -16,6 +16,9 @@
 #define IDX_BUFF_MODE 1             // req, resp
 #define IDX_BUFF_COMMAND 2          
 
+#define CMD_BUFF_SEP ";"
+#define CMD_BUFF_REQ "req"
+
 class Command {
     
 public:

@@ -1,10 +1,8 @@
-#include <Command.h>
-#include <DigitalWriteCommand.h>
-
 #include <SPI.h>
 #include <Ethernet.h>
 #include <EthernetUdp.h>
 #include "Commander.h"
+#include "DigitalReadCommand.h"
 #include "DigitalWriteCommand.h"
 
 // Enter a MAC address and IP address for your controller below.
@@ -24,6 +22,7 @@ EthernetUDP udp;
 EthernetServer tcp(8888);
 Commander commander;
 DigitalWriteCommand digitalWriteCommand;
+DigitalReadCommand digitalReadCommand;
 
 void (*fncDispatchActions)(char*, EthernetClient*);
 
@@ -43,12 +42,14 @@ void setup() {
   
   // Set commander for commands
    digitalWriteCommand.setCommander(&commander);
+   digitalReadCommand.setCommander(&commander);
   
 }
 
 void dispatchActions(char *pktBuffer, EthernetClient *client)
 {
     if( digitalWriteCommand.dispatch(pktBuffer, packetResponse) == 0) commander.sendResponse(packetResponse, client);
+    if( digitalReadCommand.dispatch(pktBuffer, packetResponse) == 0) commander.sendResponse(packetResponse, client);
 }
 
 

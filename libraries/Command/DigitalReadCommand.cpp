@@ -6,14 +6,14 @@
 //
 //
 
-#include "DigitalWriteCommand.h"
+#include "DigitalReadCommand.h"
 
-int DigitalWriteCommand::numberOfTokenRequested(char *buffer)
+int DigitalReadCommand::numberOfTokenRequested(char *buffer)
 {
-    return 5;
+    return 4;
 }
 
-bool DigitalWriteCommand::checkCommandRequested(char *buffer, char *bufTemp)
+bool DigitalReadCommand::checkCommandRequested(char *buffer, char *bufTemp)
 {
     bool retVal = false;
     
@@ -21,7 +21,7 @@ bool DigitalWriteCommand::checkCommandRequested(char *buffer, char *bufTemp)
     if(strcmp(bufTemp, CMD_BUFF_REQ)==0)
     {
         this->getBufferAtIndex(buffer, bufTemp, IDX_BUFF_COMMAND);
-        if(strcmp(bufTemp, "digwr")==0)
+        if(strcmp(bufTemp, "digrd")==0)
         {
             retVal = true;
         }
@@ -31,21 +31,25 @@ bool DigitalWriteCommand::checkCommandRequested(char *buffer, char *bufTemp)
 }
 
 
-int DigitalWriteCommand::executeActionRequested(char *inBuf, char *outBuf)
+int DigitalReadCommand::executeActionRequested(char *inBuf, char *outBuf)
 {
     byte iPin;
     byte iValore;
     
-    this->getBufferAtIndex(inBuf, outBuf, IDX_BUFFER_DIGITALWRITE_PIN);
+    this->getBufferAtIndex(inBuf, outBuf, IDX_BUFFER_DIGITALREAD_PIN);
     iPin = atoi(outBuf);
-    this->getBufferAtIndex(inBuf, outBuf, IDX_BUFFER_DIGITALWRITE_VALORE);
-    iValore = atoi(outBuf);
     
     // Set Pin Value
     pinMode(iPin, OUTPUT);
-    digitalWrite(iPin, iValore);
-
+    iValore = digitalRead(iPin);
+    
     this->createResponseMessage(inBuf, outBuf);
+    
+    char bufTemp[3] = "";
+    itoa(iValore, bufTemp, 10);
+    
+    strcat(outBuf, CMD_BUFF_SEP);
+    strcat(outBuf, bufTemp);
     
     return 0;
 }

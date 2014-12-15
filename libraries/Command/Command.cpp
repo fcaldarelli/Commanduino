@@ -158,6 +158,9 @@ int Command::dispatch(char *inStr, char *outStr)
 {
     int retVal = 0;
     
+    Serial.print("CMD = ");
+    Serial.println(inStr);
+    
     if(this->numberOfToken(inStr) != this->numberOfTokenRequested(inStr))
     {
         retVal = -1;
@@ -166,6 +169,8 @@ int Command::dispatch(char *inStr, char *outStr)
     {
         if(this->checkCommandRequested(inStr, outStr))
         {
+            Serial.println("DspCmd");
+            
             if(
                 (this->checkBufferMacaddressWithLocal(inStr, outStr))
                ||
