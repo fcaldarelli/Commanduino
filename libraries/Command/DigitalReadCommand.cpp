@@ -44,12 +44,10 @@ int DigitalReadCommand::executeActionRequested(char *inBuf, char *outBuf)
     iValore = digitalRead(iPin);
     
     this->createResponseMessage(inBuf, outBuf);
-    
-    char bufTemp[3] = "";
-    itoa(iValore, bufTemp, 10);
-    
+
     strcat(outBuf, CMD_BUFF_SEP);
-    strcat(outBuf, bufTemp);
+    
+    itoa(iValore, outBuf+strlen(outBuf), 10);
     
     return 0;
 }
