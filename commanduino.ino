@@ -20,7 +20,7 @@ char packetResponse[110];
 char localMacaddressBuff[13];
 
 EthernetUDP udp;
-EthernetServer tcp(8888);
+EthernetServer tcp(localPort);
 Commander commander;
 DigitalWriteCommand digitalWriteCommand;
 DigitalReadCommand digitalReadCommand;
@@ -53,10 +53,6 @@ void setup() {
 
 void dispatchActions(char *pktBuffer, EthernetClient *client)
 {
-    Serial.print("PKT BUFF : ");
-    Serial.print(pktBuffer);
-    Serial.print(" - l : ");
-    Serial.println(strlen(pktBuffer));
     if( digitalWriteCommand.dispatch(pktBuffer, packetResponse, localMacaddressBuff) == 0) commander.sendResponse(packetResponse, client);
     if( digitalReadCommand.dispatch(pktBuffer, packetResponse, localMacaddressBuff) == 0) commander.sendResponse(packetResponse, client);
 }
