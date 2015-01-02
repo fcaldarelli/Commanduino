@@ -167,7 +167,7 @@ int Commander::udpDispatch(char *packetBuffer, int maxLengthPacketBuffer, void (
         }
         else
         {
-            Serial.println("Packet too long");
+            Serial.println("Packet too long or 0");
         }
     }
     return packetSize;
