@@ -34,9 +34,9 @@ public:
 
     int udpStartServer(int localPort);
     int udpDispatch(char *packetBuffer, int maxLengthPacketBuffer, void (*fncServerDispatchActions)(char*, EthernetClient*));
-    void udpSend(char *buffer);
+    void udpSend(char *buffer, int remotePort);
     
-    void sendResponse(char *buffer, EthernetClient* client);
+    void sendResponse(char *buffer, EthernetClient* client, int remotePort);
 
     
 private:

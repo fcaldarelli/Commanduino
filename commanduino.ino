@@ -8,7 +8,7 @@
 // Enter a MAC address and IP address for your controller below.
 // The IP address will be dependent on your local network:
 byte mac[] = { 0x90, 0xA2, 0xDA, 0x0D, 0x6D, 0xE4 };
-byte ip[] = { 10, 9, 2, 111 };
+byte ip[] = { 192, 168, 10, 91 };
 byte dnsIP[] = { 0, 0, 0, 0 };
 byte gateway[] = { 0, 0, 0, 0 };
 byte subnet[] = { 0, 0, 0, 0 };
@@ -53,8 +53,8 @@ void setup() {
 
 void dispatchActions(char *pktBuffer, EthernetClient *client)
 {
-    if( digitalWriteCommand.dispatch(pktBuffer, packetResponse, localMacaddressBuff) == 0) commander.sendResponse(packetResponse, client);
-    if( digitalReadCommand.dispatch(pktBuffer, packetResponse, localMacaddressBuff) == 0) commander.sendResponse(packetResponse, client);
+    if( digitalWriteCommand.dispatch(pktBuffer, packetResponse, localMacaddressBuff) == 0) commander.sendResponse(packetResponse, client, localPort);
+    if( digitalReadCommand.dispatch(pktBuffer, packetResponse, localMacaddressBuff) == 0) commander.sendResponse(packetResponse, client, localPort);
 }
 
 

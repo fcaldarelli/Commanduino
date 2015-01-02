@@ -92,11 +92,11 @@ void Commander::tcpSend(char *buffer, EthernetClient* client)
     client->write(buffer);
 }
 
-void Commander::udpSend(char *buffer)
+void Commander::udpSend(char *buffer, int remotePort)
 {
     if(this->_udp != NULL)
     {
-        this->_udp->beginPacket(this->_udp->remoteIP(), this->_udp->remotePort());
+        this->_udp->beginPacket(this->_udp->remoteIP(), remotePort);
         this->_udp->write(buffer);
         this->_udp->endPacket();
     }
@@ -126,11 +126,12 @@ int Commander::udpDispatch(char *packetBuffer, int maxLengthPacketBuffer, void (
     {
         packetSize = _udp->parsePacket();
         
-        Serial.print("Received packet of size ");
-        Serial.println(packetSize);
-        
         if((packetSize>0)&&(packetSize<maxLengthPacketBuffer))
         {
+            Serial.print("Received packet of size ");
+            Serial.println(packetSize);
+            
+            
             Serial.print("From ");
             IPAddress remote = _udp->remoteIP();
             for (int i =0; i < 4; i++)
@@ -165,15 +166,18 @@ int Commander::udpDispatch(char *packetBuffer, int maxLengthPacketBuffer, void (
             
             fncServerDispatchActions(packetBuffer, NULL);
         }
+        /*
+         // Only for debug
         else
         {
             Serial.println("Packet too long or 0");
         }
+        */
     }
     return packetSize;
 }
 
-void Commander::sendResponse(char *buffer, EthernetClient* client)
+void Commander::sendResponse(char *buffer, EthernetClient* client, int remotePort)
 {
         if(client!=NULL)
         {
@@ -181,7 +185,7 @@ void Commander::sendResponse(char *buffer, EthernetClient* client)
         }
         else
         {
-            udpSend(buffer);
+            udpSend(buffer, remotePort);
         }
     
 }
