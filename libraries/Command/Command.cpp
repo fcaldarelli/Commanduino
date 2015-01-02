@@ -23,7 +23,7 @@ void Command::setCommander(Commander *cmdIn)
     this->_commander = cmdIn;
 }
 
-bool Command::checkBufferMacaddressWithLocal(char *buffer, char *tempBuff)
+bool Command::checkBufferMacaddressWithLocal(char *buffer, char *tempBuff, char *localMacaddressBuff)
 {
     byte *btMac = NULL;
     
@@ -39,12 +39,12 @@ bool Command::checkBufferMacaddressWithLocal(char *buffer, char *tempBuff)
             
             if(strlen(tempBuff) == 12)
             {
-                char strMac[12];
+                //char strMac[12];
                 for(byte k=0;k<6;k++)
                 {
-                    sprintf(strMac+(k*2), "%02X", btMac[k]);
+                    sprintf(localMacaddressBuff+(k*2), "%02X", btMac[k]);
                 }
-                if(strcmp(strMac, tempBuff) == 0)
+                if(strcmp(localMacaddressBuff, tempBuff) == 0)
                 {
                     retVal = true;
                 }
@@ -86,11 +86,11 @@ void Command::getBufferAtIndex(char *buffer, char *outBuffer, int index)
     
     outBuffer[0] = '\0';
     
-    while((p!=NULL)&&(trovato == false))
+    while((p!=NULL)&&(trovato == false)&&(strlen(p)>0))
     {
         pLast = p;
         
-        if (buffer != pLast) pLast++;
+        if ((buffer != pLast)||(k>0)) pLast++;
         
         p = strstr(pLast, ";");
         
@@ -123,9 +123,9 @@ int Command::numberOfToken(char *buffer)
     int posStart = 0;
     char *p = buffer;
     
-    while(p!=NULL)
+    while((p!=NULL)&&(strlen(p)>0))
     {
-        if (buffer != p) p++;
+        if ((buffer != p)||(k>0)) p++;
         p = strstr(p, ";");
         k++;
     }
@@ -154,25 +154,34 @@ void Command::createResponseMessage(char *inStr, char *outStr)
     }
 }
 
-int Command::dispatch(char *inStr, char *outStr)
+int Command::dispatch(char *inStr, char *outStr, char *localMacaddressBuff)
 {
     int retVal = 0;
     
     Serial.print("CMD = ");
     Serial.println(inStr);
     
-    if(this->numberOfToken(inStr) != this->numberOfTokenRequested(inStr))
+    Serial.print("IN numOfTok = ");
+    
+    int numOfTok = this->numberOfToken(inStr);
+    
+    Serial.println(numOfTok);
+    
+    if(numOfTok != this->numberOfTokenRequested(inStr))
     {
+        Serial.println("FN numOfTok");
         retVal = -1;
     }
     else
     {
+        Serial.println("IN DspCmd");
+        
         if(this->checkCommandRequested(inStr, outStr))
         {
             Serial.println("DspCmd");
             
             if(
-                (this->checkBufferMacaddressWithLocal(inStr, outStr))
+                (this->checkBufferMacaddressWithLocal(inStr, outStr, localMacaddressBuff))
                ||
                (this->isBufferMacaddressGeneric(inStr, outStr))
             )
@@ -189,6 +198,7 @@ int Command::dispatch(char *inStr, char *outStr)
         {
             retVal = -2;
         }
+        Serial.println("FN DspCmd");
 
         
     }

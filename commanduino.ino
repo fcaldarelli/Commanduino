@@ -15,8 +15,9 @@ byte subnet[] = { 0, 0, 0, 0 };
 
 unsigned int localPort = 8888;      // local port to listen on
 
-char packetBuffer[100]; //buffer to hold incoming packet,
-char packetResponse[100];
+char packetBuffer[110]; //buffer to hold incoming packet,
+char packetResponse[110];
+char localMacaddressBuff[13];
 
 EthernetUDP udp;
 EthernetServer tcp(8888);
@@ -29,7 +30,11 @@ void (*fncDispatchActions)(char*, EthernetClient*);
 void setup() {
 
   Serial.begin(9600);
-
+  
+  // To parse correctly udp packets
+  pinMode(4,OUTPUT);
+  digitalWrite(4,HIGH);
+   
   Ethernet.begin(mac, ip, dnsIP, gateway, subnet);
 
   fncDispatchActions = &dispatchActions;
@@ -48,13 +53,17 @@ void setup() {
 
 void dispatchActions(char *pktBuffer, EthernetClient *client)
 {
-    if( digitalWriteCommand.dispatch(pktBuffer, packetResponse) == 0) commander.sendResponse(packetResponse, client);
-    if( digitalReadCommand.dispatch(pktBuffer, packetResponse) == 0) commander.sendResponse(packetResponse, client);
+    Serial.print("PKT BUFF : ");
+    Serial.print(pktBuffer);
+    Serial.print(" - l : ");
+    Serial.println(strlen(pktBuffer));
+    if( digitalWriteCommand.dispatch(pktBuffer, packetResponse, localMacaddressBuff) == 0) commander.sendResponse(packetResponse, client);
+    if( digitalReadCommand.dispatch(pktBuffer, packetResponse, localMacaddressBuff) == 0) commander.sendResponse(packetResponse, client);
 }
 
 
 void loop() {
-
+  
   commander.udpDispatch(packetBuffer, 100, fncDispatchActions);
   commander.tcpDispatch(packetBuffer, 100, fncDispatchActions);
 

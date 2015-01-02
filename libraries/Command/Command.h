@@ -26,14 +26,14 @@ public:
     ~Command();
 
 public:
-    int dispatch(char *inStr, char *outStr);
+    int dispatch(char *inStr, char *outStr, char *localMacaddressBuff);
     void setCommander(Commander *cmdIn);
 
     
 protected:
     void getBufferAtIndex(char *buffer, char *outBuffer, int index);
     int numberOfToken(char *buffer);
-    bool checkBufferMacaddressWithLocal(char *buffer, char *tempBuff);
+    bool checkBufferMacaddressWithLocal(char *buffer, char *tempBuff, char *localMacaddressBuff);
     bool isBufferMacaddressGeneric(char *buffer, char *tempBuff);
     void createResponseMessage(char *inStr, char *outStr);
 

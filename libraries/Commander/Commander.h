@@ -37,10 +37,7 @@ public:
     void udpSend(char *buffer);
     
     void sendResponse(char *buffer, EthernetClient* client);
-    
-    void getBufferAtIndex(char *buffer, char *outBuffer, int index);
-    int numberOfToken(char *buffer);
-    int dispatchDigitalWrite(char *inStr, char *outStr);
+
     
 private:
     EthernetUDP *_udp;

@@ -65,7 +65,7 @@ int Commander::tcpDispatch(char *packetBuffer, int maxLengthPacketBuffer, void (
             packetBuffer[0] = '\0';
         
             while (client.connected()) {
-                while (client.available()) {
+                while ((client.available())&&(packetSize<maxLengthPacketBuffer)) {
                     char c = client.read();
                     if (c!=0)
                     {
@@ -125,10 +125,12 @@ int Commander::udpDispatch(char *packetBuffer, int maxLengthPacketBuffer, void (
     if (_udp != NULL)
     {
         packetSize = _udp->parsePacket();
-        if(packetSize>0)
+        
+        Serial.print("Received packet of size ");
+        Serial.println(packetSize);
+        
+        if((packetSize>0)&&(packetSize<maxLengthPacketBuffer))
         {
-            Serial.print("Received packet of size ");
-            Serial.println(packetSize);
             Serial.print("From ");
             IPAddress remote = _udp->remoteIP();
             for (int i =0; i < 4; i++)
@@ -144,15 +146,28 @@ int Commander::udpDispatch(char *packetBuffer, int maxLengthPacketBuffer, void (
             
             // read the packet into packetBufffer
             int nr = _udp->read(packetBuffer,maxLengthPacketBuffer);
-            Serial.println("Contents:");
+            /*
+            if(nr>maxLengthPacketBuffer)
+            {
+                packetBuffer[maxLengthPacketBuffer] = '\0';
+            }
+            else
+            {
+                packetBuffer[nr] = '\0';
+            }
+            */
+            
             Serial.print("Ricevuti bytes = ");
             Serial.println(nr);
             Serial.print("data = ");
             Serial.println(packetBuffer);
             
-            packetBuffer[nr] = '\0';
             
             fncServerDispatchActions(packetBuffer, NULL);
+        }
+        else
+        {
+            Serial.println("Packet too long");
         }
     }
     return packetSize;
@@ -171,61 +186,6 @@ void Commander::sendResponse(char *buffer, EthernetClient* client)
     
 }
 
-void Commander::getBufferAtIndex(char *buffer, char *outBuffer, int index)
-{
-    int k = 0;
-    char *p = buffer;
-    char *pLast = buffer;
-    bool trovato = false;
-    
-    outBuffer[0] = '\0';
-    
-    while((p!=NULL)&&(trovato == false))
-    {
-        pLast = p;
-        
-        if (buffer != pLast) pLast++;
-        
-        p = strstr(pLast, ";");
-        
-        if(p!=NULL)
-        {
-            if(index == k)
-            {
-                trovato = true;
-                strncpy(outBuffer, pLast, p-pLast);
-                outBuffer[p-pLast] = '\0';
-                
-            }
-        }
-        else
-        {
-            if (index == k)
-            {
-                trovato = true;
-                strcpy(outBuffer, pLast);
-            }
-        }
-
-        k++;
-    }
-}
-
-int Commander::numberOfToken(char *buffer)
-{
-    int k = 0;
-    int posStart = 0;
-    char *p = buffer;
-    
-    while(p!=NULL)
-    {
-        if (buffer != p) p++;
-        p = strstr(p, ";");
-        k++;
-    }
-    
-    return k;
-}
 
 
 
