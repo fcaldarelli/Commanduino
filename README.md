@@ -47,6 +47,8 @@ You have to subclass Command class and override previous three methods.
 How to use
 ==========
 
+Use PacketSender to make tests. This is an opensource software available for all platforms (Windows, Linux, Mac), downloadable from http://packetsender.com/
+
 Follow these instructions:
 
 1. Open commanduino.ino and change mac (row 12), ip (row 13) if you need tcp connection and local port (row 18), if 8888 is wrong.
